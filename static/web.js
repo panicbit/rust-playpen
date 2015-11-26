@@ -473,6 +473,9 @@
     var clearResultButton;
     var keyboard;
     var themes;
+    var slotSelect;
+    var saveButton;
+    var loadButton;
     var editor;
     var session;
     var themelist;
@@ -551,6 +554,9 @@
         keyboard = document.getElementById("keyboard");
         asm_flavor = document.getElementById("asm-flavor");
         themes = document.getElementById("themes");
+        slotSelect = document.getElementById("slot");
+        saveButton = document.getElementById("save");
+        loadButton = document.getElementById("load");
         editor = ace.edit("editor");
         set_result.editor = editor;
         session = editor.getSession();
@@ -687,6 +693,24 @@
 
         themes.onkeyup = themes.onchange = function () {
             set_theme(editor, themelist, themes.options[themes.selectedIndex].text);
+        };
+
+        saveButton.onclick = function() {
+            var code = session.getValue();
+            var slot = slotSelect.value;
+
+            if (confirm("Really SAVE to '"+slot+"'?")) {
+                optionalLocalStorageSetItem("slot-" + slot, code);
+            }
+        };
+
+        loadButton.onclick = function() {
+            var slot = slotSelect.value;
+            var code = optionalLocalStorageGetItem("slot-" + slot);
+
+            if (confirm("Really LOAD from '"+slot+"'?")) {
+                session.setValue(code);
+            }
         };
 
     }, false);
