@@ -462,6 +462,98 @@
         }
     }
 
+    var snippetPrefix = "snippet-";
+
+    function getSnippetNames() {
+        var snippets = [];
+        for (var i = 0; i < localStorage.length; i++) {
+            var key = localStorage.key(i);
+            if (_.startsWith(key, snippetPrefix)) {
+                // strip prefix
+                key = key.substr(snippetPrefix.length);
+                snippets.push(key);
+            }
+        }
+        return _.sortBy(snippets, function(str) { return str.toUpperCase() });
+    }
+
+    function renderSnippetsManager(result, session, snippetsTemplate) {
+        var snippets = getSnippetNames();
+
+        set_result(result, snippetsTemplate({
+            snippets: snippets
+        }));
+
+        var actionElems = document.querySelectorAll("#snippets-manager *[data-snippet]");
+
+        var createButton = document.getElementById("create-snippet");
+        var newSnippetNameInput = document.getElementById('new-snippet-name');
+
+        _.each(actionElems, function(elem) {
+            elem.onclick = function() {
+                var action = elem.attributes["data-action"].value;
+                var snippetName = elem.attributes["data-snippet"].value;
+
+                switch (action) {
+                    case "load":
+                        if (confirm("Really LOAD '" + snippetName + "'?")) {
+                            loadSnippet(session, snippetName);
+                        }
+                        break;
+                    case "save":
+                        if (confirm("Really OVERWRITE '" + snippetName + "'?")) {
+                            saveSnippet(session, snippetName);
+                        }
+                        break;
+                    case "delete":
+                        if (confirm("Really DELETE '" + snippetName + "'?")) {
+                            deleteSnippet(snippetName);
+                        }
+
+                        // Rerender
+                        renderSnippetsManager(result, session, snippetsTemplate);
+                        break;
+                }
+
+            };
+        });
+
+        createButton.onclick = function() {
+            var snippetName = newSnippetNameInput.value;
+            if (!existsSnippet(snippetName) || confirm("Snippet '" + snippetName + "' already exists.\nOverwrite it?")) {
+                saveSnippet(session, snippetName);
+                newSnippetNameInput.value = '';
+                // Rerender
+                renderSnippetsManager(result, session, snippetsTemplate);
+            }
+        };
+
+        newSnippetNameInput.onkeyup = function(event) {
+            if (event.keyCode == 13) {
+                createButton.click();
+            }
+        };
+
+    }
+
+    function loadSnippet(session, snippetName) {
+        var code = optionalLocalStorageGetItem(snippetPrefix + snippetName);
+        session.setValue(code);
+    }
+
+    function saveSnippet(session, snippetName) {
+        var code = session.getValue();
+        optionalLocalStorageSetItem(snippetPrefix + snippetName, code);
+    }
+
+    function deleteSnippet(snippetName) {
+            localStorage.removeItem(snippetPrefix + snippetName);
+    }
+
+    function existsSnippet(snippetName) {
+        return typeof localStorage.getItem(snippetPrefix + snippetName) === "string";
+    }
+
     var evaluateButton;
     var asmButton;
     var irButton;
@@ -473,6 +565,8 @@
     var clearResultButton;
     var keyboard;
     var themes;
+    var snippetsTemplate;
+    var snippetsButton;
     var editor;
     var session;
     var themelist;
@@ -551,6 +645,8 @@
         keyboard = document.getElementById("keyboard");
         asm_flavor = document.getElementById("asm-flavor");
         themes = document.getElementById("themes");
+        snippetsTemplate = _.template(document.getElementById("snippets-template").innerHTML);
+        snippetsButton = document.getElementById("snippets");
         editor = ace.edit("editor");
         set_result.editor = editor;
         session = editor.getSession();
@@ -687,6 +783,10 @@
 
         themes.onkeyup = themes.onchange = function () {
             set_theme(editor, themelist, themes.options[themes.selectedIndex].text);
+        };
+
+        snippetsButton.onclick = function() {
+            renderSnippetsManager(result, session, snippetsTemplate);
         };
 
     }, false);
