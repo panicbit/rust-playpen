@@ -85,16 +85,16 @@
 				><h2>Snippets</h2
 				><div
 	                ><input id="new-snippet-name" type="text" placeholder="Snippet name"
-	                ><span><button id="create-snippet" type="button">Create</button></span
+	                ><span><button id="create-snippet" class="safe" type="button">Create</button></span
 	            ></div
 				><table
 					><% _.each(snippets, function(snippet) {
 						%><tr
-							><td><button type="button" class="primary" data-action="load" data-snippet="<%- snippet %>"><%- snippet %></a></td
+							><td><button type="button" class="primary safe" data-action="load" data-snippet="<%- snippet %>"><%- snippet %></a></td
 							><td
 								><span
-									><button type="button" data-action="save" data-snippet="<%- snippet %>">Overwrite</button
-									><button type="button" data-action="delete" data-snippet="<%- snippet %>">Delete</button
+									><button type="button" class="danger" data-action="save" data-snippet="<%- snippet %>">Overwrite</button
+									><button type="button" class="danger" data-action="delete" data-snippet="<%- snippet %>">Delete</button
 								></span
 							></td
 						></tr

@@ -446,6 +446,29 @@ button[disabled]:last-child::before {
     margin-right: 0.5em;
 }
 
+
+#snippets-manager button.safe {
+    background: rgba(4, 41, 144, 0.7);
+    color: rgba(255, 255, 255, 0.87);
+}
+
+#snippets-manager button.safe:hover,
+#snippets-manager button.safe:focus,
+#snippets-manager button.safe:active {
+    background-color: rgba(4, 41, 144, 0.9);
+}
+
+#snippets-manager button.danger {
+    background: rgba(170, 68, 34, 0.5);
+}
+
+#snippets-manager button.danger:hover,
+#snippets-manager button.danger:focus,
+#snippets-manager button.danger:active {
+    background-color: rgba(170, 47, 34, 0.85);
+}
+
+
 @supports (display: flex) {
     /* The position: absolute approach is mostly OK, but flex is better. */
 
