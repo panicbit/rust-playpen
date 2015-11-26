@@ -17,11 +17,11 @@
     display: block;
 }
 
-:root, button {
+:root, button, input[type=text] {
     line-height: 1.4;
 }
 
-:root, button, label {
+:root, button, label, input[type=text] {
     font-family: sans-serif;
     font-size: 1rem;
 }
@@ -131,7 +131,8 @@ button:last-child {
     border-bottom-right-radius: 4px;
 }
 
-button {
+
+button, input[type=text] {
     color: #333;
     background-color: #fff;
     border: 1px solid rgba(153, 153, 153, 0.5);
@@ -140,6 +141,13 @@ button {
     vertical-align: middle;
     cursor: pointer;
     outline: 0;
+}
+
+input[type=text] {
+    cursor: auto;
+    border-radius: 4px;
+    border-width: 1px;
+    margin-right: 8px;
 }
 
 button::-moz-focus-inner {
@@ -427,6 +435,15 @@ button[disabled]:last-child::before {
 
 #result[data-empty] {
     bottom: unset;
+}
+
+#snippets-manager > * {
+    margin-bottom: 1em;
+}
+
+#snippets-manager table button[data-action=load] {
+    width: 100%;
+    margin-right: 0.5em;
 }
 
 @supports (display: flex) {
