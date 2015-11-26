@@ -49,6 +49,11 @@
 					><input type=radio name=version id=version-nightly value=nightly><label for=version-nightly title="Use the nightly channel">Nightly</label
 				></div
 			></div
+			><wbr><div
+				><div
+					><button type=button id=snippets title="Manage your code snippets">Snippets</button
+				></div
+			></div
 			><wbr><div class=right-c-e
 				><button type=button id=configure-editor><span>Configure editor</span></button
 				><div class=dropdown>
@@ -74,5 +79,28 @@
 }</div>
             <div id=result data-empty><div></div><button type=button id=clear-result title="Close this pane">×</button></div>
         </main>
+
+		<script type="text/template" id="snippets-template"
+			><div id="snippets-manager"
+				><h2>Snippets</h2
+				><div
+	                ><input id="new-snippet-name" type="text" placeholder="Snippet name"
+	                ><span><button id="create-snippet" type="button">Create</button></span
+	            ></div
+				><table
+					><% _.each(snippets, function(snippet) {
+						%><tr
+							><td><button type="button" class="primary" data-action="load" data-snippet="<%- snippet %>"><%- snippet %></a></td
+							><td
+								><span
+									><button type="button" data-action="save" data-snippet="<%- snippet %>">Overwrite</button
+									><button type="button" data-action="delete" data-snippet="<%- snippet %>">Delete</button
+								></span
+							></td
+						></tr
+					><% })
+				%></table
+			></div
+		></script>
     </body>
 </html>
